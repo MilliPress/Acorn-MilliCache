@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         php: ['8.2', '8.3']
-        acorn: ['4.x-dev', '5.x-dev']
+        acorn: ['^4.0', '^5.0']
 
     steps:
       - name: Checkout
@@ -42,12 +42,10 @@ jobs:
           key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.acorn }}-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.acorn }}-
 
-      - name: Update Acorn to ${{ matrix.acorn }}
+      - name: Install dependencies with Acorn ${{ matrix.acorn }}
         run: |
           composer require "roots/acorn:${{ matrix.acorn }}" --no-update
-
-      - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist
+          composer install --no-interaction --prefer-dist
 
       - name: Validate composer.json
         run: composer validate --no-check-all --no-check-publish
