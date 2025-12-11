@@ -1,0 +1,68 @@
+name: Auto Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'composer.json'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if version sync commit
+        id: check
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+
+          if [[ "$COMMIT_MSG" =~ "sync with MilliCache" ]] || [[ "$COMMIT_MSG" =~ "Sync with MilliCache" ]]; then
+            echo "is_sync=true" >> $GITHUB_OUTPUT
+            VERSION=$(echo "$COMMIT_MSG" | grep -oP 'v?\d+\.\d+\.\d+(-rc\.\d+)?(-beta\.\d+)?(-alpha\.\d+)?' | head -1)
+            VERSION=${VERSION#v}
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+          else
+            echo "is_sync=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check if tag exists
+        if: steps.check.outputs.is_sync == 'true'
+        id: tag
+        run: |
+          VERSION="${{ steps.check.outputs.version }}"
+
+          if git tag | grep -q "^v${VERSION}$"; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Release
+        if: steps.check.outputs.is_sync == 'true' && steps.tag.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.check.outputs.version }}
+          name: v${{ steps.check.outputs.version }}
+          body: |
+            Synced with [MilliCache v${{ steps.check.outputs.version }}](https://github.com/MilliPress/MilliCache/releases/tag/v${{ steps.check.outputs.version }})
+
+            ## Installation
+
+            ```bash
+            composer require millipress/acorn-millicache
+            ```
+
+            For details, see [MilliCache Release Notes](https://github.com/MilliPress/MilliCache/releases/tag/v${{ steps.check.outputs.version }})
+          draft: false
+          prerelease: ${{ contains(steps.check.outputs.version, '-rc') || contains(steps.check.outputs.version, '-beta') || contains(steps.check.outputs.version, '-alpha') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

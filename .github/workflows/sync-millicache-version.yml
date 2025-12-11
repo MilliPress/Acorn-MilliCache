@@ -1,0 +1,106 @@
+name: Sync MilliCache Version
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Get latest MilliCache release
+        id: millicache
+        run: |
+          LATEST=$(curl -s https://api.github.com/repos/MilliPress/MilliCache/releases/latest | jq -r '.tag_name')
+          VERSION=${LATEST#v}
+
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$LATEST" >> $GITHUB_OUTPUT
+          echo "Latest MilliCache: $LATEST"
+
+      - name: Check if already synced
+        id: check
+        run: |
+          VERSION="${{ steps.millicache.outputs.version }}"
+
+          if git tag | grep -q "^v${VERSION}$"; then
+            echo "already_synced=true" >> $GITHUB_OUTPUT
+            echo "Version v${VERSION} already synced"
+          else
+            echo "already_synced=false" >> $GITHUB_OUTPUT
+            echo "New version detected: ${VERSION}"
+          fi
+
+      - name: Update composer.json
+        if: steps.check.outputs.already_synced == 'false'
+        id: update
+        run: |
+          VERSION="${{ steps.millicache.outputs.version }}"
+
+          # Determine constraint based on version type
+          if [[ "$VERSION" =~ -rc\. ]]; then
+            MAJOR_MINOR=$(echo "$VERSION" | grep -oP '^\d+\.\d+')
+            CONSTRAINT="^${MAJOR_MINOR}@RC"
+          elif [[ "$VERSION" =~ -(beta|alpha) ]]; then
+            CONSTRAINT="${VERSION}"
+          else
+            MAJOR_MINOR=$(echo "$VERSION" | grep -oP '^\d+\.\d+')
+            CONSTRAINT="^${MAJOR_MINOR}"
+          fi
+
+          echo "Updating constraint to: $CONSTRAINT"
+
+          jq --arg constraint "$CONSTRAINT" \
+            '.require["millipress/millicache"] = $constraint' \
+            composer.json > composer.json.tmp
+          mv composer.json.tmp composer.json
+
+          echo "constraint=$CONSTRAINT" >> $GITHUB_OUTPUT
+
+      - name: Setup PHP
+        if: steps.check.outputs.already_synced == 'false'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+          coverage: none
+
+      - name: Validate composer.json
+        if: steps.check.outputs.already_synced == 'false'
+        run: composer validate --no-check-all --no-check-publish
+
+      - name: Create Pull Request
+        if: steps.check.outputs.already_synced == 'false'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            chore: sync with MilliCache ${{ steps.millicache.outputs.tag }}
+          branch: sync/millicache-${{ steps.millicache.outputs.version }}
+          delete-branch: true
+          title: 'chore: Sync with MilliCache ${{ steps.millicache.outputs.tag }}'
+          body: |
+            ## Automated Version Sync
+
+            - **MilliCache**: `${{ steps.millicache.outputs.tag }}`
+            - **Constraint**: `${{ steps.update.outputs.constraint }}`
+
+            ### Release Notes
+            https://github.com/MilliPress/MilliCache/releases/tag/${{ steps.millicache.outputs.tag }}
+          labels: dependencies

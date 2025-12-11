@@ -1,0 +1,27 @@
+# Composer
+/vendor/
+composer.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.phpunit.result.cache
+phpunit.xml
+
+# Build
+/build/
+/dist/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# AI/Claude Code
+.claude/

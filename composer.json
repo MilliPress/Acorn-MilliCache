@@ -1,0 +1,56 @@
+{
+    "name": "millipress/acorn-millicache",
+    "description": "MilliCache integration for Roots Acorn and Bedrock projects",
+    "type": "library",
+    "license": "GPL-2.0-or-later",
+    "keywords": [
+        "wordpress",
+        "bedrock",
+        "acorn",
+        "cache",
+        "redis",
+        "laravel",
+        "full-page-cache",
+        "millicache"
+    ],
+    "homepage": "https://www.millipress.com/millicache",
+    "authors": [
+        {
+            "name": "MilliPress Team",
+            "email": "hello@millipress.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "millipress/millicache": "1.0.0-rc.4",
+        "roots/acorn": ">=4.0",
+        "koodimonni/composer-dropin-installer": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MilliPress\\AcornMilliCache\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MilliPress\\AcornMilliCache\\Providers\\MilliCacheServiceProvider"
+            ]
+        },
+        "dropin-paths": {
+            "web/app/": [
+                "type:wordpress-dropin"
+            ]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "koodimonni/composer-dropin-installer": true
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@php -r \"if (file_exists('vendor/millipress/millicache/advanced-cache.php')) { echo 'MilliCache installed. Run: wp acorn millicache:install-dropin\\n'; }\""
+        ]
+    }
+}
