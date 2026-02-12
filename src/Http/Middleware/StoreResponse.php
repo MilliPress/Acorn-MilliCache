@@ -29,7 +29,7 @@ class StoreResponse
             return $next($request);
         }
 
-        if (! millicache()->options()->should_cache()) {
+        if (! millicache()->options()->is_caching_allowed()) {
             return $next($request);
         }
 
@@ -37,7 +37,7 @@ class StoreResponse
 
         // Re-check after controller — rules or controller code
         // may have changed the decision during request handling.
-        if (! millicache()->options()->should_cache()) {
+        if (! millicache()->options()->is_caching_allowed()) {
             return $response;
         }
 
@@ -70,7 +70,7 @@ class StoreResponse
             );
         } catch (\Throwable $e) {
             // Cache failures must never break the response.
-            error_log('[acorn-millicache] StoreResponse failed: ' . $e->getMessage());
+            error_log('[acorn-millicache] StoreResponse failed: '.$e->getMessage());
         }
     }
 
