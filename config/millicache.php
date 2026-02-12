@@ -17,15 +17,4 @@ return [
         'groups' => ['web'],
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Cacheable Status Codes
-    |--------------------------------------------------------------------------
-    |
-    | Only responses with these HTTP status codes will be stored in the cache.
-    |
-    */
-
-    'cacheable_status_codes' => [200],
-
 ];

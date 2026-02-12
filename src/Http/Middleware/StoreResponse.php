@@ -4,7 +4,6 @@ namespace MilliPress\AcornMilliCache\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use MilliCache\Engine\Request\Processor;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -26,134 +25,60 @@ class StoreResponse
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Skip if the MilliCache plugin is not active.
         if (! function_exists('millicache')) {
             return $next($request);
         }
 
-        if (! $this->shouldCache()) {
+        if (! millicache()->options()->should_cache()) {
             return $next($request);
         }
 
         $response = $next($request);
 
-        if (! $this->isCacheableStatus($response)) {
-            return $response;
-        }
-
         // Re-check after controller — rules or controller code
         // may have changed the decision during request handling.
-        if (! $this->shouldCache()) {
+        if (! millicache()->options()->should_cache()) {
             return $response;
         }
 
-        $this->storeInCache($response);
+        $content = $response->getContent();
+
+        if ($content === false) {
+            return $response;
+        }
+
+        $this->store($content, $response);
 
         return $response;
     }
 
     /**
-     * Check if the Engine decided this request is cacheable.
+     * Store the response via MilliCache's ResponseProcessor.
      *
-     * Reads the cache decision from MilliCache's Options, which
-     * aggregates all MilliRules (PHP + WP) and DONOTCACHEPAGE.
+     * Delegates hash generation, flag collection, entry creation,
+     * compression, and storage to the Engine's pipeline.
      */
-    protected function shouldCache(): bool
-    {
-        $decision = millicache()->options()->get_cache_decision();
-
-        if ($decision && ! $decision['decision']) {
-            return false;
-        }
-
-        if (defined('DONOTCACHEPAGE') && DONOTCACHEPAGE) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Check if the response status code is cacheable.
-     */
-    protected function isCacheableStatus(Response $response): bool
-    {
-        /** @var list<int> $codes */
-        $codes = config('millicache.cacheable_status_codes', [200]);
-
-        return in_array($response->getStatusCode(), $codes, true);
-    }
-
-    /**
-     * Store the response in MilliCache's Redis cache.
-     *
-     * Mirrors the storage path of Engine\Response\Processor::process_output_buffer()
-     * but reads from the Symfony Response instead of PHP's output buffer.
-     */
-    protected function storeInCache(Response $response): void
+    protected function store(string $content, Response $response): void
     {
         try {
-            $engine = millicache();
-
-            // Build a RequestProcessor to generate the hash and URL hash.
-            // The Engine already cleaned $_SERVER/$_COOKIE during start(),
-            // so the Hasher produces the identical hash from the same state.
-            $processor = new Processor($engine->config());
-            $hash = $processor->get_hasher()->generate();
-
-            if (empty($hash)) {
-                return;
-            }
-
-            // Collect flags (mirrors ResponseProcessor::process_output_buffer).
-            $flags = $engine->flags()->get_all();
-            $flags[] = 'url:' . $processor->get_url_hash();
-            $flags = array_unique($flags);
-
-            // Fallback flag when no content-specific flags were added.
-            if (count($flags) <= 1) {
-                $flags[] = $engine->flags()->get_key('flag');
-            }
-
-            // Get TTL/grace overrides set via millicache_set_ttl()/millicache_set_grace().
-            $customTtl = $engine->options()->get_ttl();
-            $customGrace = $engine->options()->get_grace();
-
-            // Build header list from the Response, excluding cookies and
-            // MilliCache's own headers (matches Writer::process_headers logic).
-            $headers = $this->collectHeaders($response);
-
-            // Create, compress, and store the cache entry via MilliCache's Writer.
-            $writer = $engine->cache()->get_writer();
-
-            $content = $response->getContent();
-
-            if ($content === false) {
-                return;
-            }
-
-            $entry = $writer->create_entry(
+            millicache()->response()->store(
                 $content,
-                $headers,
+                $this->collectHeaders($response),
                 $response->getStatusCode(),
-                $customTtl,
-                $customGrace,
+                millicache()->options()->get_ttl(),
+                millicache()->options()->get_grace(),
             );
-
-            $entry = $writer->compress($entry);
-            $writer->store($hash, $entry, $flags);
         } catch (\Throwable $e) {
             // Cache failures must never break the response.
-            // Log for debugging — storage errors, config issues, etc.
             error_log('[acorn-millicache] StoreResponse failed: ' . $e->getMessage());
         }
     }
 
     /**
-     * Collect storable headers from the Response.
+     * Collect headers from the Response in "Key: Value" format.
      *
-     * Filters out Set-Cookie and X-MilliCache-* headers, matching the
-     * filtering logic in Writer::process_headers().
+     * The Engine's Writer::validate_headers() handles filtering
+     * Set-Cookie and X-MilliCache-* headers internally.
      *
      * @return array<string>
      */
@@ -162,10 +87,6 @@ class StoreResponse
         $headers = [];
 
         foreach ($response->headers->all() as $name => $values) {
-            if ($name === 'set-cookie' || str_starts_with($name, 'x-millicache')) {
-                continue;
-            }
-
             foreach ((array) $values as $value) {
                 $headers[] = "$name: $value";
             }

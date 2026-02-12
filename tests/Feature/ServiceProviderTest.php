@@ -10,7 +10,6 @@ it('merges default config when registered', function () {
 
     expect(config('millicache.middleware.enabled'))->toBeTrue();
     expect(config('millicache.middleware.groups'))->toBe(['web']);
-    expect(config('millicache.cacheable_status_codes'))->toBe([200]);
 });
 
 it('has publishable config', function () {
