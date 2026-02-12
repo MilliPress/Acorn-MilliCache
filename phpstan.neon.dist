@@ -1,0 +1,18 @@
+parameters:
+    level: 8
+    paths:
+        - src
+    bootstrapFiles:
+        - tests/phpstan-bootstrap.php
+    ignoreErrors:
+        # ServiceProvider::$app array access is typed as the Application
+        # interface, but works on the concrete class. Standard Laravel.
+        -
+            identifier: offsetAccess.nonOffsetAccessible
+            message: '#Cannot access offset .+ on Illuminate\\Contracts\\Foundation\\Application#'
+        # The second shouldCache() re-checks after the controller has run.
+        # PHPStan sees it as always-true because it can't model the side
+        # effects of $next($request) on Engine state and DONOTCACHEPAGE.
+        -
+            identifier: booleanNot.alwaysFalse
+            path: src/Http/Middleware/StoreResponse.php

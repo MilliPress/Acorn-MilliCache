@@ -4,6 +4,7 @@ namespace MilliPress\AcornMilliCache\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use MilliCache\Engine\Request\Processor;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -25,7 +26,7 @@ class StoreResponse
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Skip if MilliCache plugin is not active.
+        // Skip if the MilliCache plugin is not active.
         if (! function_exists('millicache')) {
             return $next($request);
         }
@@ -97,7 +98,7 @@ class StoreResponse
             // Build a RequestProcessor to generate the hash and URL hash.
             // The Engine already cleaned $_SERVER/$_COOKIE during start(),
             // so the Hasher produces the identical hash from the same state.
-            $processor = new \MilliCache\Engine\Request\Processor($engine->config());
+            $processor = new Processor($engine->config());
             $hash = $processor->get_hasher()->generate();
 
             if (empty($hash)) {
@@ -125,8 +126,14 @@ class StoreResponse
             // Create, compress, and store the cache entry via MilliCache's Writer.
             $writer = $engine->cache()->get_writer();
 
+            $content = $response->getContent();
+
+            if ($content === false) {
+                return;
+            }
+
             $entry = $writer->create_entry(
-                $response->getContent(),
+                $content,
                 $headers,
                 $response->getStatusCode(),
                 $customTtl,
