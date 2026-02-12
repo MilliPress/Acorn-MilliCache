@@ -25,6 +25,11 @@ class StoreResponse
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Skip if MilliCache plugin is not active.
+        if (! function_exists('millicache')) {
+            return $next($request);
+        }
+
         if (! $this->shouldCache()) {
             return $next($request);
         }
@@ -132,6 +137,8 @@ class StoreResponse
             $writer->store($hash, $entry, $flags);
         } catch (\Throwable $e) {
             // Cache failures must never break the response.
+            // Log for debugging — storage errors, config issues, etc.
+            error_log('[acorn-millicache] StoreResponse failed: ' . $e->getMessage());
         }
     }
 
