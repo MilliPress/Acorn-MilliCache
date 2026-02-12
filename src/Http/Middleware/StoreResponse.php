@@ -35,12 +35,6 @@ class StoreResponse
 
         $response = $next($request);
 
-        // Re-check after controller — rules or controller code
-        // may have changed the decision during request handling.
-        if (! millicache()->options()->is_caching_allowed()) {
-            return $response;
-        }
-
         $content = $response->getContent();
 
         if ($content === false) {
