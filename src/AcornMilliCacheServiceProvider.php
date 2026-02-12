@@ -3,7 +3,6 @@
 namespace MilliPress\AcornMilliCache;
 
 use Illuminate\Support\ServiceProvider;
-use MilliPress\AcornMilliCache\Console\Commands\CacheStatusCommand;
 use MilliPress\AcornMilliCache\Http\Middleware\StoreResponse;
 
 class AcornMilliCacheServiceProvider extends ServiceProvider
@@ -23,10 +22,6 @@ class AcornMilliCacheServiceProvider extends ServiceProvider
     {
         $this->registerPublishing();
         $this->registerMiddleware();
-
-        $this->commands([
-            CacheStatusCommand::class,
-        ]);
     }
 
     /**
