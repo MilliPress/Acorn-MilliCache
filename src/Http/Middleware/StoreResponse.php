@@ -41,6 +41,7 @@ class StoreResponse
             return $response;
         }
 
+        $this->addFlags($request);
         $this->store($content, $response);
 
         return $response;
@@ -65,6 +66,24 @@ class StoreResponse
         } catch (\Throwable $e) {
             // Cache failures must never break the response.
             error_log('[acorn-millicache] StoreResponse failed: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * Add cache flags for the current Acorn route.
+     *
+     * Named routes get a 'route:{name}' flag (dots converted to colons
+     * to match MilliCache's flag convention). Unnamed routes get a bare
+     * 'route' fallback flag. Both are matched by the 'route*' wildcard.
+     */
+    protected function addFlags(Request $request): void
+    {
+        $name = $request->route()->getName();
+
+        if ($name !== null) {
+            millicache()->flags()->add('route:' . str_replace('.', ':', $name));
+        } else {
+            millicache()->flags()->add('route');
         }
     }
 
