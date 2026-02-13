@@ -1,13 +1,13 @@
 <?php
 
-namespace MilliPress\AcornMilliCache\Tests;
+namespace MilliCache\Acorn\Tests;
 
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
     /**
-     * We intentionally do NOT load the full AcornMilliCacheServiceProvider
+     * We intentionally do NOT load the full ServiceProvider
      * because it calls pushMiddlewareToGroup() which requires the full
      * router stack. Individual tests register only the components they need.
      */

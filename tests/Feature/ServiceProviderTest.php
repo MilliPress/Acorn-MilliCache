@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Routing\Router;
-use MilliPress\AcornMilliCache\AcornMilliCacheServiceProvider;
-use MilliPress\AcornMilliCache\Http\Middleware\StoreResponse;
+use MilliCache\Acorn\ServiceProvider;
+use MilliCache\Acorn\Http\Middleware\StoreResponse;
 
 it('merges default config when registered', function () {
-    $provider = new AcornMilliCacheServiceProvider($this->app);
+    $provider = new ServiceProvider($this->app);
     $provider->register();
 
     expect(config('millicache.middleware.enabled'))->toBeTrue();
@@ -13,12 +13,12 @@ it('merges default config when registered', function () {
 });
 
 it('has publishable config', function () {
-    $provider = new AcornMilliCacheServiceProvider($this->app);
+    $provider = new ServiceProvider($this->app);
     $provider->register();
     $provider->boot();
 
-    $paths = AcornMilliCacheServiceProvider::pathsToPublish(
-        AcornMilliCacheServiceProvider::class,
+    $paths = ServiceProvider::pathsToPublish(
+        ServiceProvider::class,
         'millicache'
     );
 
@@ -29,7 +29,7 @@ it('has publishable config', function () {
 });
 
 it('pushes middleware to configured groups when enabled', function () {
-    $provider = new AcornMilliCacheServiceProvider($this->app);
+    $provider = new ServiceProvider($this->app);
     $provider->register();
     $provider->boot();
 
@@ -43,7 +43,7 @@ it('pushes middleware to configured groups when enabled', function () {
 it('does not push middleware when disabled', function () {
     config()->set('millicache.middleware.enabled', false);
 
-    $provider = new AcornMilliCacheServiceProvider($this->app);
+    $provider = new ServiceProvider($this->app);
     $provider->register();
     $provider->boot();
 
@@ -57,7 +57,7 @@ it('does not push middleware when disabled', function () {
 it('respects custom middleware groups', function () {
     config()->set('millicache.middleware.groups', ['web', 'api']);
 
-    $provider = new AcornMilliCacheServiceProvider($this->app);
+    $provider = new ServiceProvider($this->app);
     $provider->register();
     $provider->boot();
 

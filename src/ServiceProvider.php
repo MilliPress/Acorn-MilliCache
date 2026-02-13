@@ -1,11 +1,11 @@
 <?php
 
-namespace MilliPress\AcornMilliCache;
+namespace MilliCache\Acorn;
 
-use Illuminate\Support\ServiceProvider;
-use MilliPress\AcornMilliCache\Http\Middleware\StoreResponse;
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use MilliCache\Acorn\Http\Middleware\StoreResponse;
 
-class AcornMilliCacheServiceProvider extends ServiceProvider
+class ServiceProvider extends BaseServiceProvider
 {
     /**
      * Register services.

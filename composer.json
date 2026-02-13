@@ -34,18 +34,18 @@
   },
   "autoload": {
     "psr-4": {
-      "MilliPress\\AcornMilliCache\\": "src/"
+      "MilliCache\\Acorn\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "MilliPress\\AcornMilliCache\\Tests\\": "tests/"
+      "MilliCache\\Acorn\\Tests\\": "tests/"
     }
   },
   "extra": {
     "acorn": {
       "providers": [
-        "MilliPress\\AcornMilliCache\\AcornMilliCacheServiceProvider"
+        "MilliCache\\Acorn\\ServiceProvider"
       ]
     }
   },
