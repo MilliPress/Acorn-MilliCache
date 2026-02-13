@@ -9,17 +9,6 @@
       "homepage": "https://millipress.com"
     }
   ],
-  "repositories": [
-    {
-      "type": "path",
-      "url": "../acorn-millirules"
-    },
-    {
-      "type": "path",
-      "url": "../../Plugins/MilliCache",
-      "canonical": false
-    }
-  ],
   "require": {
     "php": ">=8.1",
     "roots/acorn": "^4.0 || ^5.0",
