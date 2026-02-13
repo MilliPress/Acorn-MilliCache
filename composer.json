@@ -12,10 +12,10 @@
   "require": {
     "php": ">=8.1",
     "roots/acorn": "^4.0 || ^5.0",
-    "millipress/millicache": "^1.2.2"
+    "millipress/millicache": "^1.0.0"
   },
   "suggest": {
-    "millipress/acorn-millirules": "Add route-aware cache rules and conditions for Acorn routes"
+    "millipress/acorn-millirules": "Add route-aware rules, conditions & actions for Acorn routes and cache them"
   },
   "require-dev": {
     "laravel/pint": "^1.0",
