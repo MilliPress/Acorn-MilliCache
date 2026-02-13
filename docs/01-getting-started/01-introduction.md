@@ -30,9 +30,15 @@ On the next request, `advanced-cache.php` serves the cached version directly —
 | PHP               | >= 8.1                    |
 | Roots Acorn       | ^4.0 or ^5.0              |
 | MilliCache        | ^1.2.2                    |
-| Acorn MilliRules  | required (auto-installed) |
+| Acorn MilliRules  | optional                  |
 
-Both MilliCache and Acorn MilliRules are declared as Composer dependencies and will be installed automatically. However, MilliCache is a WordPress plugin that must be **activated and configured** separately. See the [MilliCache installation guide](https://millipress.com/docs/millicache/getting-started/installation/) for details.
+MilliCache is declared as a Composer dependency and will be installed automatically. However, it is a WordPress plugin that must be **activated and configured** separately. See the [MilliCache installation guide](https://millipress.com/docs/millicache/getting-started/installation/) for details.
+
+[Acorn MilliRules](https://millipress.com/docs/acorn-millirules/) is an optional companion package that adds route-aware cache rules and conditions. Install it separately if needed:
+
+```bash
+composer require millipress/acorn-millirules
+```
 
 ## Next Steps
 
