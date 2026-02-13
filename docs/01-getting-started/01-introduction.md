@@ -34,11 +34,12 @@ On the next request, `advanced-cache.php` serves the cached version directly —
 
 MilliCache is declared as a Composer dependency and will be installed automatically. However, it is a WordPress plugin that must be **activated and configured** separately. See the [MilliCache installation guide](https://millipress.com/docs/millicache/getting-started/installation/) for details.
 
-[Acorn MilliRules](https://millipress.com/docs/acorn-millirules/) is an optional companion package that adds route-aware cache rules and conditions. Install it separately if needed:
-
-```bash
-composer require millipress/acorn-millirules
-```
+> [!TIP]
+> **Pair with [Acorn MilliRules](https://millipress.com/docs/acorn-millirules/)** for the full picture. While Acorn MilliCache handles cache *storage*, Acorn MilliRules lets you define route-aware conditions, HTTP response actions, redirects, header manipulation, and custom cache flags — all from auto-discovered rule classes. Caching is just the beginning.
+>
+> ```bash
+> composer require millipress/acorn-millirules
+> ```
 
 ## Next Steps
 

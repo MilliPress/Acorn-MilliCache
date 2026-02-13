@@ -54,6 +54,22 @@ If you see `MISS` on every request, check that:
 - The route is not excluded by a MilliCache rule or condition
 - You are not logged in or sending cookies that bypass caching
 
+## Add Acorn MilliRules (Optional)
+
+Want route-aware conditions, redirects, header manipulation, and custom cache flags for your Acorn routes? Add [Acorn MilliRules](https://millipress.com/docs/acorn-millirules/):
+
+```bash
+composer require millipress/acorn-millirules
+```
+
+Then scaffold your first rule:
+
+```bash
+wp acorn rules:make:rule RedirectLegacyPages
+```
+
+Rule classes are auto-discovered — no registration needed. See the [Acorn MilliRules documentation](https://millipress.com/docs/acorn-millirules/) for the full list of conditions and actions.
+
 ## Next Steps
 
 - **[Configuration](../02-configuration/01-configuration.md)** — add middleware groups, disable auto-registration, or register manually
