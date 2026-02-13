@@ -1,7 +1,9 @@
-/.editorconfig      export-ignore
-/.gitattributes     export-ignore
-/.github            export-ignore
-/phpstan.neon.dist  export-ignore
-/phpunit.xml        export-ignore
-/pint.json          export-ignore
-/tests              export-ignore
+/.editorconfig                export-ignore
+/.gitattributes               export-ignore
+/.github                      export-ignore
+/.release-please-manifest.json export-ignore
+/release-please-config.json   export-ignore
+/phpstan.neon.dist            export-ignore
+/phpunit.xml                  export-ignore
+/pint.json                    export-ignore
+/tests                        export-ignore
