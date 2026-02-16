@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/MilliPress/Acorn-MilliCache/compare/v1.0.0...v1.1.0) (2026-02-16)
+
+
+### Features
+
+* Use check_cache_decision() for post-next cache gating ([a737954](https://github.com/MilliPress/Acorn-MilliCache/commit/a737954b4e4bba2ccb32a15089cb345a48100c79))
+
 ## 1.0.0 (2026-02-13)
 
 
