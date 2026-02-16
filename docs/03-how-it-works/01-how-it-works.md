@@ -46,18 +46,17 @@ The `StoreResponse` middleware runs inside Acorn's Laravel router — exactly wh
 ```mermaid
 flowchart TD
     A[Request enters middleware] --> B{millicache function<br/>exists?}
-    B -->|No| C[Skip — MilliCache not active]
-    C --> D[Run controller]
-    B -->|Yes| E{is_caching_allowed?}
-    E -->|No| F[Skip — caching not allowed]
-    F --> D
-    E -->|Yes| D
-    D --> G[Response ready]
-    G --> H{Content available?}
-    H -->|No| I[Return response as-is]
-    H -->|Yes| J[Add cache flags]
+    B -->|No| C[Run controller only]
+    C --> D[Return response]
+    B -->|Yes| E[Run inner pipeline]
+    E --> F[Response ready]
+    F --> G{check_cache_decision?}
+    G -->|No| H[Return response]
+    G -->|Yes| I{Content available?}
+    I -->|No| H
+    I -->|Yes| J[Add cache flags]
     J --> K[Store in Redis]
-    K --> L[Return response]
+    K --> H
 
     style K fill:#d4edda
 ```
@@ -65,14 +64,14 @@ flowchart TD
 The middleware follows this sequence:
 
 1. **Check MilliCache is active** — `function_exists('millicache')`. If MilliCache isn't loaded (e.g. deactivated), the middleware becomes a no-op.
-2. **Check caching is allowed** — `millicache()->options()->is_caching_allowed()`. This respects all of MilliCache's conditions (logged-in users, excluded URLs, POST requests, etc.).
-3. **Run the controller** — `$next($request)` passes the request down the middleware stack to your controller, which returns a response.
+2. **Run the inner pipeline** — `$next($request)` passes the request through any inner middleware (including [Acorn MilliRules](https://millipress.com/docs/acorn-millirules/)' `ExecuteRules` middleware, if installed) and into your controller.
+3. **Check the cache decision** — `millicache()->check_cache_decision()`. By this point, both MilliCache's PHP bootstrap rules *and* any WordPress-aware rules from Acorn MilliRules have executed. If any rule called `do_cache(false)` (e.g. for logged-in users), the check returns `false` and the response is returned without storing. MilliCache handles bypass and reason headers internally.
 4. **Capture the response** — the middleware reads the response content, headers, and status code.
 5. **Add cache flags** — adds a `route:{name}` flag for named routes, or a bare `route` flag for unnamed routes (see [Cache Flags](#cache-flags) below).
 6. **Store in Redis** — delegates to `millicache()->response()->store()`, which handles hash generation, flag collection, compression, and writing the cache entry.
 
 > [!IMPORTANT]
-> The caching decision (`is_caching_allowed()`) is made **before** the controller runs. This means no unnecessary storage work happens for requests that should not be cached.
+> The cache decision is checked **after** the inner pipeline runs. This ensures that rules requiring WordPress context (e.g. `is_user_logged_in()`) have already executed. [Acorn MilliRules](https://millipress.com/docs/acorn-millirules/) can disable caching based on logged-in users, specific routes, or any custom condition.
 
 ## What Gets Stored
 
@@ -194,9 +193,9 @@ sequenceDiagram
     WordPress->>Acorn: parse_request (route matched)
     Acorn->>Middleware: Enter middleware stack
     Middleware->>Middleware: Check millicache() exists ✓
-    Middleware->>Middleware: Check is_caching_allowed() ✓
-    Middleware->>Controller: $next($request)
+    Middleware->>Controller: $next($request) (runs ExecuteRules + controller)
     Controller-->>Middleware: Response (200, HTML, headers)
+    Middleware->>Middleware: check_cache_decision() ✓
     Middleware->>Middleware: Add flag (route:{name})
     Middleware->>Redis: Store via millicache()->response()->store()
     Middleware-->>Browser: Return response

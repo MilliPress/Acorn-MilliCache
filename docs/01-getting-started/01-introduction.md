@@ -12,8 +12,8 @@ Acorn MilliCache bridges [Acorn](https://roots.io/acorn/) custom routes with [Mi
 
 Acorn MilliCache adds a `StoreResponse` middleware to your Acorn router. On a cache MISS, the middleware:
 
-1. Checks that MilliCache is active and caching is allowed, e.g. that all cache rules pass and the request is cacheable
-2. Lets the controller handle the request as usual
+1. Lets the controller (and any inner middleware like [Acorn MilliRules](https://millipress.com/docs/acorn-millirules/)) handle the request
+2. Checks MilliCache's cache decision — respecting all rules that ran during the request
 3. Captures the finished response (content, headers, status code)
 4. Tags the entry with a `route:{name}` cache flag for targeted invalidation
 5. Stores it in Redis/ValKey via MilliCache's `ResponseProcessor`

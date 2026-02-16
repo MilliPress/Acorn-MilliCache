@@ -12,7 +12,7 @@
   "require": {
     "php": ">=8.1",
     "roots/acorn": "^4.0 || ^5.0",
-    "millipress/millicache": "^1.0.0"
+    "millipress/millicache": "^1.0.2"
   },
   "suggest": {
     "millipress/acorn-millirules": "Add route-aware rules, conditions & actions for Acorn routes and cache them"

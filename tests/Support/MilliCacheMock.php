@@ -54,7 +54,7 @@ class MilliCacheMock
         $this->addedFlags[] = $flag;
     }
 
-    public function is_caching_allowed(): bool
+    public function check_cache_decision(): bool
     {
         return $this->cachingAllowed;
     }

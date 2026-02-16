@@ -62,6 +62,23 @@ it('returns response unchanged when store throws', function () {
     $response->assertSee('expected content');
 });
 
+it('skips storing when caching is disallowed during next', function () {
+    Route::middleware(StoreResponse::class)
+        ->get('/test/post-check', function () {
+            // Simulate ExecuteRules calling do_cache(false) inside $next()
+            MilliCacheMock::$instance->cachingAllowed = false;
+
+            return 'should not be cached';
+        });
+
+    $response = $this->get('/test/post-check');
+
+    $response->assertOk();
+    $response->assertSee('should not be cached');
+    expect(MilliCacheMock::$instance->storeCalled)->toBe(0);
+    expect(MilliCacheMock::$instance->addedFlags)->toBeEmpty();
+});
+
 it('stores response content and headers', function () {
     Route::middleware(StoreResponse::class)
         ->get('/test/store', fn () => response('cached body', 200, ['X-Custom' => 'value']));

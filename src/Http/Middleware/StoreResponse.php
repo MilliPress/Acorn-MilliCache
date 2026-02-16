@@ -29,11 +29,13 @@ class StoreResponse
             return $next($request);
         }
 
-        if (! millicache()->options()->is_caching_allowed()) {
-            return $next($request);
-        }
-
         $response = $next($request);
+
+        // Check after $next() so ExecuteRules middleware can set
+        // do_cache(false) based on WordPress/Acorn conditions.
+        if (! millicache()->check_cache_decision()) {
+            return $response;
+        }
 
         $content = $response->getContent();
 
