@@ -5,6 +5,7 @@ namespace MilliCache\Acorn\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * Stores Acorn route responses in MilliCache's Redis cache.
@@ -63,7 +64,7 @@ class StoreResponse
                 millicache()->options()->get_ttl(),
                 millicache()->options()->get_grace(),
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Cache failures must never break the response.
             error_log('[acorn-millicache] StoreResponse failed: '.$e->getMessage());
         }
@@ -81,7 +82,7 @@ class StoreResponse
         $name = $request->route()->getName();
 
         if ($name !== null) {
-            millicache()->flags()->add('route:' . str_replace('.', ':', $name));
+            millicache()->flags()->add('route:'.str_replace('.', ':', $name));
         } else {
             millicache()->flags()->add('route');
         }

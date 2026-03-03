@@ -21,16 +21,16 @@ MilliCache's standard caching flow works like this:
 ```mermaid
 flowchart TD
     A[Request arrives] --> B{advanced-cache.php<br/>Redis lookup}
-    B -->|HIT| C[Serve cached page<br/>~5-15 ms]
+    B -->|HIT| C["Serve cached page<br/>~5-15 ms"]
     B -->|MISS| D[WordPress loads]
     D --> E[parse_request]
     E -->|Acorn route| F[Laravel router handles request]
     E -->|WordPress route| G[template_redirect]
     G --> H[MilliCache output buffering]
-    H --> I[Store in Redis ✓]
+    H --> I["Store in Redis ✓"]
     F --> J[Response sent]
     J --> K[template_redirect never fires]
-    K --> L[Not cached ✗]
+    K --> L["Not cached ✗"]
 
     style C fill:#d4edda
     style I fill:#d4edda
@@ -90,7 +90,7 @@ The middleware passes these values to MilliCache's `ResponseProcessor`:
 
 ## Cache Flags
 
-MilliCache uses [cache flags](https://millipress.com/docs/millicache/cache-flags/) for targeted invalidation — e.g. purging all entries tagged with a specific flag. For WordPress pages, MilliCache automatically adds flags like `post:123` or `archive:category:5` via its `RequestFlags` rules. Since Acorn routes bypass that hook, this package adds its own flags before storing.
+MilliCache uses [cache flags](https://millipress.com/docs/millicache/03-cache-flags/01-introduction) for targeted invalidation — e.g. purging all entries tagged with a specific flag. For WordPress pages, MilliCache automatically adds flags like `post:123` or `archive:category:5` via its `RequestFlags` rules. Since Acorn routes bypass that hook, this package adds its own flags before storing.
 
 ### Automatic Flags
 
@@ -131,7 +131,7 @@ wp millicache clear --flag=route*
 wp millicache clear --flag=route:products:index
 ```
 
-See the [MilliCache WP-CLI documentation](https://millipress.com/docs/millicache/wp-cli/) for the full command reference.
+See the [MilliCache WP-CLI documentation](https://millipress.com/docs/millicache/06-wp-cli/01-commands) for the full command reference.
 
 ### Automatic Clearing
 
@@ -210,6 +210,6 @@ sequenceDiagram
 
 ## Further Reading
 
-- [MilliCache — How Caching Works](https://millipress.com/docs/millicache/how-it-works/) — the full cache lifecycle including output buffering, compression, and stale-while-revalidate
-- [MilliCache — Configuration](https://millipress.com/docs/millicache/configuration/) — TTL, grace period, and other cache settings
+- [MilliCache — How Caching Works](https://millipress.com/docs/millicache/05-usage/10-how-caching-works) — the full cache lifecycle including output buffering, compression, and stale-while-revalidate
+- [MilliCache — Configuration](https://millipress.com/docs/millicache/02-configuration/01-overview) — TTL, grace period, and other cache settings
 - [Acorn MilliRules](https://millipress.com/docs/acorn-millirules/) — route-aware cache rules and conditions

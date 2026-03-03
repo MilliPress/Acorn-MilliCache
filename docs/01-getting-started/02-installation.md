@@ -21,7 +21,7 @@ composer require millipress/acorn-millicache
 This also installs [MilliCache](https://millipress.com/docs/millicache/) as a Composer dependency.
 
 > [!IMPORTANT]
-> MilliCache is a regular WordPress plugin. After Composer installs it, you still need to **activate** it in WordPress and configure it (Redis/ValKey connection, `advanced-cache.php` drop-in, etc.). See the [MilliCache installation guide](https://millipress.com/docs/millicache/getting-started/installation/).
+> MilliCache is a regular WordPress plugin. After Composer installs it, you still need to **activate** it in WordPress and configure it (Redis/ValKey connection, `advanced-cache.php` drop-in, etc.). See the [MilliCache installation guide](https://millipress.com/docs/millicache/01-getting-started/20-installation).
 
 > [!TIP]
 > The service provider is registered automatically via Acorn's package discovery (`extra.acorn.providers` in `composer.json`). No manual provider registration is needed.
