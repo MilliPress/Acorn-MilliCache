@@ -10,7 +10,7 @@ menu_order: 20
 
 Before installing, ensure you have:
 
-- **Roots Acorn ^4.0 or ^5.0** set up in your [Bedrock](https://roots.io/bedrock/), [Sage](https://roots.io/sage/) or [Radicle](https://roots.io/radicle/) project.
+- **Roots Acorn ^4.0, ^5.0 or ^6.0** set up in your [Bedrock](https://roots.io/bedrock/), [Sage](https://roots.io/sage/) or [Radicle](https://roots.io/radicle/) project.
 
 ## Install the Package
 

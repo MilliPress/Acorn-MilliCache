@@ -28,7 +28,7 @@ On the next request, `advanced-cache.php` serves the cached version directly —
 | Requirement       | Version                   |
 |-------------------|---------------------------|
 | PHP               | >= 8.1                    |
-| Roots Acorn       | ^4.0 or ^5.0              |
+| Roots Acorn       | ^4.0, ^5.0 or ^6.0        |
 | MilliCache        | ^1.2.2                    |
 | Acorn MilliRules  | optional                  |
 
