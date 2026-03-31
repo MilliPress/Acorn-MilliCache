@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/MilliPress/Acorn-MilliCache/compare/v1.1.0...v1.2.0) (2026-03-31)
+
+
+### Features
+
+* **compat:** Add Acorn 6 support ([9edc6d9](https://github.com/MilliPress/Acorn-MilliCache/commit/9edc6d9dabf6ad67012387a9429b8adc5f501a55))
+
 ## [1.1.0](https://github.com/MilliPress/Acorn-MilliCache/compare/v1.0.0...v1.1.0) (2026-02-16)
 
 
