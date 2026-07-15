@@ -32,6 +32,10 @@ class StoreResponse
 
         $response = $next($request);
 
+        if ($this->isNonStorable($response)) {
+            return $response;
+        }
+
         if (! millicache()->check_cache_decision()) {
             return $response;
         }
@@ -86,6 +90,25 @@ class StoreResponse
         } else {
             millicache()->flags()->add('route');
         }
+    }
+
+    /**
+     * Whether the response itself forbids shared-cache storage.
+     *
+     * Rules can only reason about the request, so a controller that knows
+     * its response must not be cached (auth-gated payload, content
+     * negotiation gone sideways, error representation) says so on the
+     * response via `Cache-Control: no-store` — and that always wins, even
+     * over a rule's doCache(true). Only `no-store` counts: Symfony stamps
+     * `no-cache, private` on every response that didn't set its own
+     * Cache-Control, so treating those as non-storable would disable the
+     * middleware entirely.
+     */
+    protected function isNonStorable(Response $response): bool
+    {
+        $cacheControl = (string) $response->headers->get('Cache-Control', '');
+
+        return (bool) preg_match('/\bno-store\b/i', $cacheControl);
     }
 
     /**
