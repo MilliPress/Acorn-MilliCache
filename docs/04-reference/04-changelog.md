@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.0](https://github.com/MilliPress/Acorn-MilliCache/compare/v1.2.0...v1.3.0) (2026-07-16)
+
+
+### Features
+
+* **store:** respect Cache-Control no-store on responses ([e0128fe](https://github.com/MilliPress/Acorn-MilliCache/commit/e0128fe0ee85397bae0024a6e55e29bc8fb8b3f4))
+
+
+### Bug Fixes
+
+* **deps:** require MilliCache 1.7.2 for the shared rules engine ([7c6c462](https://github.com/MilliPress/Acorn-MilliCache/commit/7c6c462fb9c4b9a647daa9bbeb80f250e7158ce8))
+
 ## [1.2.0](https://github.com/MilliPress/Acorn-MilliCache/compare/v1.1.0...v1.2.0) (2026-03-31)
 
 
