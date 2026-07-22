@@ -6,7 +6,7 @@ menu_order: 10
 
 # Configuration
 
-The published config file lives at `config/millicache.php` in your Acorn application. It controls the `StoreResponse` middleware and automatic cache clearing for Artisan commands — all other caching settings (TTL, grace period, exclusions, compression, etc.) are managed by [MilliCache itself](https://millipress.com/docs/millicache/02-configuration/01-overview).
+The published config file lives at `config/millicache.php` in your Acorn application. It controls the `StoreResponse` middleware and automatic cache clearing for Artisan commands — all other caching settings (TTL, grace period, exclusions, compression, etc.) are managed by [MilliCache itself](https://www.millipress.com/docs/millicache/02-configuration/01-overview).
 
 ## Config Reference
 
@@ -117,6 +117,6 @@ To disable automatic clearing entirely, set `clear` to an empty array:
 
 All other caching behavior is configured through MilliCache and MilliRules:
 
-- **TTL, grace period, compression** — [MilliCache Configuration](https://millipress.com/docs/millicache/02-configuration/01-overview)
-- **Cache exclusions, conditions, rules** — [MilliRules Documentation](https://millipress.com/docs/millirules/)
-- **Route-aware conditions** — [Acorn MilliRules Documentation](https://millipress.com/docs/acorn-millirules/)
+- **TTL, grace period, compression** — [MilliCache Configuration](https://www.millipress.com/docs/millicache/02-configuration/01-overview)
+- **Cache exclusions, conditions, rules** — [MilliRules Documentation](https://www.millipress.com/docs/millirules/)
+- **Route-aware conditions** — [Acorn MilliRules Documentation](https://www.millipress.com/docs/acorn-millirules/)

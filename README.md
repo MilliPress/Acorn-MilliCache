@@ -26,7 +26,7 @@ The middleware is registered automatically via Acorn's package discovery. On a c
 
 ## Documentation
 
-Full documentation is available at **[millipress.com/docs/acorn-millicache](https://millipress.com/docs/acorn-millicache/)** or in the [`docs/`](docs/) directory:
+Full documentation is available at **[millipress.com/docs/acorn-millicache](https://www.millipress.com/docs/acorn-millicache/)** or in the [`docs/`](docs/) directory:
 
 - [Introduction](docs/01-getting-started/01-introduction.md)
 - [Installation](docs/01-getting-started/02-installation.md)
@@ -47,13 +47,14 @@ Scaffold a rule in seconds:
 wp acorn rules:make:rule RedirectLegacyPages
 ```
 
-Caching is just the beginning. See the [Acorn MilliRules documentation](https://millipress.com/docs/acorn-millirules/) to explore what's possible.
+Caching is just the beginning. See the [Acorn MilliRules documentation](https://www.millipress.com/docs/acorn-millirules/) to explore what's possible.
 
 ## Related
 
 - **[MilliCache](https://github.com/MilliPress/MilliCache)** — the Redis/Valkey full-page cache engine for WordPress
+- **[MilliCache Pro](https://www.millipress.com/millicache-pro/)** — premium MilliCache modules: entries browser, visual rules builder, preloading, metrics, edge cache, asset CDN, object cache
 - **[Acorn MilliRules](https://github.com/MilliPress/Acorn-MilliRules)** — route-aware rules, conditions, and actions for Acorn
-- **[millipress.com](https://millipress.com)** — MilliPress documentation and resources
+- **[millipress.com](https://www.millipress.com)** — MilliPress documentation and resources
 
 ## License
 

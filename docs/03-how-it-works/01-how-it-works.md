@@ -64,14 +64,14 @@ flowchart TD
 The middleware follows this sequence:
 
 1. **Check MilliCache is active** — `function_exists('millicache')`. If MilliCache isn't loaded (e.g. deactivated), the middleware becomes a no-op.
-2. **Run the inner pipeline** — `$next($request)` passes the request through any inner middleware (including [Acorn MilliRules](https://millipress.com/docs/acorn-millirules/)' `ExecuteRules` middleware, if installed) and into your controller.
+2. **Run the inner pipeline** — `$next($request)` passes the request through any inner middleware (including [Acorn MilliRules](https://www.millipress.com/docs/acorn-millirules/)' `ExecuteRules` middleware, if installed) and into your controller.
 3. **Check the cache decision** — `millicache()->check_cache_decision()`. By this point, both MilliCache's PHP bootstrap rules *and* any WordPress-aware rules from Acorn MilliRules have executed. If any rule called `do_cache(false)` (e.g. for logged-in users), the check returns `false` and the response is returned without storing. MilliCache handles bypass and reason headers internally.
 4. **Capture the response** — the middleware reads the response content, headers, and status code.
 5. **Add cache flags** — adds a `route:{name}` flag for named routes, or a bare `route` flag for unnamed routes (see [Cache Flags](#cache-flags) below).
 6. **Store in Redis** — delegates to `millicache()->response()->store()`, which handles hash generation, flag collection, compression, and writing the cache entry.
 
 > [!IMPORTANT]
-> The cache decision is checked **after** the inner pipeline runs. This ensures that rules requiring WordPress context (e.g. `is_user_logged_in()`) have already executed. [Acorn MilliRules](https://millipress.com/docs/acorn-millirules/) can disable caching based on logged-in users, specific routes, or any custom condition.
+> The cache decision is checked **after** the inner pipeline runs. This ensures that rules requiring WordPress context (e.g. `is_user_logged_in()`) have already executed. [Acorn MilliRules](https://www.millipress.com/docs/acorn-millirules/) can disable caching based on logged-in users, specific routes, or any custom condition.
 
 ## What Gets Stored
 
@@ -90,7 +90,7 @@ The middleware passes these values to MilliCache's `ResponseProcessor`:
 
 ## Cache Flags
 
-MilliCache uses [cache flags](https://millipress.com/docs/millicache/03-cache-flags/01-introduction) for targeted invalidation — e.g. purging all entries tagged with a specific flag. For WordPress pages, MilliCache automatically adds flags like `post:123` or `archive:category:5` via its `RequestFlags` rules. Since Acorn routes bypass that hook, this package adds its own flags before storing.
+MilliCache uses [cache flags](https://www.millipress.com/docs/millicache/03-cache-flags/01-introduction) for targeted invalidation — e.g. purging all entries tagged with a specific flag. For WordPress pages, MilliCache automatically adds flags like `post:123` or `archive:category:5` via its `RequestFlags` rules. Since Acorn routes bypass that hook, this package adds its own flags before storing.
 
 ### Automatic Flags
 
@@ -112,7 +112,7 @@ Use the `route*` wildcard to target all Acorn route caches at once, or a specifi
 
 ### Custom Flags
 
-You can add custom flags to Acorn route cache entries using [Acorn MilliRules](https://millipress.com/docs/acorn-millirules/). Define a rule with an `add_flag` action that targets your route by name, controller, or any other condition.
+You can add custom flags to Acorn route cache entries using [Acorn MilliRules](https://www.millipress.com/docs/acorn-millirules/). Define a rule with an `add_flag` action that targets your route by name, controller, or any other condition.
 
 ## Cache Clearing
 
@@ -131,7 +131,7 @@ wp millicache clear --flag=route*
 wp millicache clear --flag=route:products:index
 ```
 
-See the [MilliCache WP-CLI documentation](https://millipress.com/docs/millicache/06-wp-cli/01-commands) for the full command reference.
+See the [MilliCache WP-CLI documentation](https://www.millipress.com/docs/millicache/06-wp-cli/01-commands) for the full command reference.
 
 ### Automatic Clearing
 
@@ -210,6 +210,6 @@ sequenceDiagram
 
 ## Further Reading
 
-- [MilliCache — How Caching Works](https://millipress.com/docs/millicache/05-usage/10-how-caching-works) — the full cache lifecycle including output buffering, compression, and stale-while-revalidate
-- [MilliCache — Configuration](https://millipress.com/docs/millicache/02-configuration/01-overview) — TTL, grace period, and other cache settings
-- [Acorn MilliRules](https://millipress.com/docs/acorn-millirules/) — route-aware cache rules and conditions
+- [MilliCache — How Caching Works](https://www.millipress.com/docs/millicache/05-usage/10-how-caching-works) — the full cache lifecycle including output buffering, compression, and stale-while-revalidate
+- [MilliCache — Configuration](https://www.millipress.com/docs/millicache/02-configuration/01-overview) — TTL, grace period, and other cache settings
+- [Acorn MilliRules](https://www.millipress.com/docs/acorn-millirules/) — route-aware cache rules and conditions

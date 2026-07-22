@@ -18,10 +18,13 @@ Before installing, ensure you have:
 composer require millipress/acorn-millicache
 ```
 
-This also installs [MilliCache](https://millipress.com/docs/millicache/) as a Composer dependency.
+This also installs [MilliCache](https://www.millipress.com/docs/millicache/) as a Composer dependency.
 
 > [!IMPORTANT]
-> MilliCache is a regular WordPress plugin. After Composer installs it, you still need to **activate** it in WordPress and configure it (Redis/ValKey connection, `advanced-cache.php` drop-in, etc.). See the [MilliCache installation guide](https://millipress.com/docs/millicache/01-getting-started/20-installation).
+> MilliCache is a regular WordPress plugin. After Composer installs it, you still need to **activate** it in WordPress and configure it (Redis/ValKey connection, `advanced-cache.php` drop-in, etc.). See the [MilliCache installation guide](https://www.millipress.com/docs/millicache/01-getting-started/20-installation).
+
+> [!NOTE]
+> Using [MilliCache Pro](https://www.millipress.com/millicache-pro/)? Pro bundles MilliCache, so activate **only** the Pro plugin and leave the Composer-installed MilliCache plugin deactivated. It stays in place as the package's Composer dependency.
 
 > [!TIP]
 > The service provider is registered automatically via Acorn's package discovery (`extra.acorn.providers` in `composer.json`). No manual provider registration is needed.
@@ -56,7 +59,7 @@ If you see `MISS` on every request, check that:
 
 ## Add Acorn MilliRules (Optional)
 
-Want route-aware conditions, redirects, header manipulation, and custom cache flags for your Acorn routes? Add [Acorn MilliRules](https://millipress.com/docs/acorn-millirules/):
+Want route-aware conditions, redirects, header manipulation, and custom cache flags for your Acorn routes? Add [Acorn MilliRules](https://www.millipress.com/docs/acorn-millirules/):
 
 ```bash
 composer require millipress/acorn-millirules
@@ -68,7 +71,7 @@ Then scaffold your first rule:
 wp acorn rules:make:rule RedirectLegacyPages
 ```
 
-Rule classes are auto-discovered — no registration needed. See the [Acorn MilliRules documentation](https://millipress.com/docs/acorn-millirules/) for the full list of conditions and actions.
+Rule classes are auto-discovered — no registration needed. See the [Acorn MilliRules documentation](https://www.millipress.com/docs/acorn-millirules/) for the full list of conditions and actions.
 
 ## Next Steps
 

@@ -6,13 +6,13 @@ menu_order: 10
 
 # Introduction
 
-Acorn MilliCache bridges [Acorn](https://roots.io/acorn/) custom routes with [MilliCache](https://millipress.com/docs/millicache/)'s Redis full-page caching. It provides a single Laravel middleware (`StoreResponse`) that captures Acorn route responses and stores them in the exact format MilliCache's `advanced-cache.php` drop-in expects.
+Acorn MilliCache bridges [Acorn](https://roots.io/acorn/) custom routes with [MilliCache](https://www.millipress.com/docs/millicache/)'s Redis full-page caching. It provides a single Laravel middleware (`StoreResponse`) that captures Acorn route responses and stores them in the exact format MilliCache's `advanced-cache.php` drop-in expects.
 
 ## Why Acorn MilliCache?
 
 Acorn MilliCache adds a `StoreResponse` middleware to your Acorn router. On a cache MISS, the middleware:
 
-1. Lets the controller (and any inner middleware like [Acorn MilliRules](https://millipress.com/docs/acorn-millirules/)) handle the request
+1. Lets the controller (and any inner middleware like [Acorn MilliRules](https://www.millipress.com/docs/acorn-millirules/)) handle the request
 2. Checks MilliCache's cache decision — respecting all rules that ran during the request
 3. Captures the finished response (content, headers, status code)
 4. Tags the entry with a `route:{name}` cache flag for targeted invalidation
@@ -21,7 +21,7 @@ Acorn MilliCache adds a `StoreResponse` middleware to your Acorn router. On a ca
 On the next request, `advanced-cache.php` serves the cached version directly — no WordPress, no Acorn/Laravel, no controller. Just Redis and PHP.
 
 > [!NOTE]
-> This package only handles cache **storage**. Cache **serving** is handled by MilliCache's `advanced-cache.php` drop-in. Cache **rules and conditions** are managed by [MilliRules](https://millipress.com/docs/millirules/) and [Acorn MilliRules](https://millipress.com/docs/acorn-millirules/).
+> This package only handles cache **storage**. Cache **serving** is handled by MilliCache's `advanced-cache.php` drop-in. Cache **rules and conditions** are managed by [MilliRules](https://www.millipress.com/docs/millirules/) and [Acorn MilliRules](https://www.millipress.com/docs/acorn-millirules/).
 
 ## Prerequisites
 
@@ -32,10 +32,12 @@ On the next request, `advanced-cache.php` serves the cached version directly —
 | MilliCache        | ^1.2.2                    |
 | Acorn MilliRules  | optional                  |
 
-MilliCache is declared as a Composer dependency and will be installed automatically. However, it is a WordPress plugin that must be **activated and configured** separately. See the [MilliCache installation guide](https://millipress.com/docs/millicache/01-getting-started/20-installation) for details.
+MilliCache is declared as a Composer dependency and will be installed automatically. However, it is a WordPress plugin that must be **activated and configured** separately. See the [MilliCache installation guide](https://www.millipress.com/docs/millicache/01-getting-started/20-installation) for details.
+
+If you use [MilliCache Pro](https://www.millipress.com/millicache-pro/), activate only the Pro plugin: it bundles MilliCache, so the Composer-installed MilliCache plugin stays deactivated.
 
 > [!TIP]
-> **Pair with [Acorn MilliRules](https://millipress.com/docs/acorn-millirules/)** for the full picture. While Acorn MilliCache handles cache *storage*, Acorn MilliRules lets you define route-aware conditions, HTTP response actions, redirects, header manipulation, and custom cache flags — all from auto-discovered rule classes. Caching is just the beginning.
+> **Pair with [Acorn MilliRules](https://www.millipress.com/docs/acorn-millirules/)** for the full picture. While Acorn MilliCache handles cache *storage*, Acorn MilliRules lets you define route-aware conditions, HTTP response actions, redirects, header manipulation, and custom cache flags — all from auto-discovered rule classes. Caching is just the beginning.
 >
 > ```bash
 > composer require millipress/acorn-millirules
