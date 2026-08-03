@@ -1,6 +1,6 @@
 ---
 title: 'How It Works'
-post_excerpt: 'How the StoreResponse middleware fills the gap between Acorn routes and MilliCache.'
+description: 'How Acorn MilliCache caches Laravel route responses in WordPress: the StoreResponse middleware pipeline, cache flags, clearing, and the Redis HIT path.'
 menu_order: 10
 ---
 

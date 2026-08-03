@@ -1,3 +1,9 @@
+---
+title: 'Changelog'
+description: 'Acorn MilliCache release history: new features, fixes, and Acorn compatibility updates for the Laravel route caching bridge to MilliCache and Redis.'
+menu_order: 40
+---
+
 # Changelog
 
 ## [1.3.0](https://github.com/MilliPress/Acorn-MilliCache/compare/v1.2.0...v1.3.0) (2026-07-16)
@@ -38,9 +44,3 @@
 ### Bug Fixes
 
 * Reset release-please manifest to 0.0.0 for initial release ([d02ff59](https://github.com/MilliPress/Acorn-MilliCache/commit/d02ff59d54fbfa29120797e8fed33414dcbbf751))
-
----
-title: 'Changelog'
-post_excerpt: '...'
-menu_order: 40
----

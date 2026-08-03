@@ -1,6 +1,6 @@
 ---
 title: 'Introduction'
-post_excerpt: 'What Acorn MilliCache does, why it is needed, and what you need before installing.'
+description: 'Acorn MilliCache stores Acorn and Laravel route responses in MilliCache''s Redis full-page cache, bringing WordPress-grade caching to Roots stack routes.'
 menu_order: 10
 ---
 

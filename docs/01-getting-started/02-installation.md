@@ -1,6 +1,6 @@
 ---
 title: 'Installation'
-post_excerpt: 'Install Acorn MilliCache via Composer, publish the config file, and verify caching works.'
+description: 'Install Acorn MilliCache with Composer in your Bedrock or Sage project, publish the config, and verify Redis caching of Acorn routes with a HIT header.'
 menu_order: 20
 ---
 

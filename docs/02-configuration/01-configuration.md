@@ -1,6 +1,6 @@
 ---
 title: 'Configuration'
-post_excerpt: 'Config reference for middleware registration and automatic cache clearing.'
+description: 'Configuration reference for Acorn MilliCache: middleware groups, manual StoreResponse registration, and automatic cache clearing on Artisan commands.'
 menu_order: 10
 ---
 
