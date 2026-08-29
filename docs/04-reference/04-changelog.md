@@ -6,6 +6,13 @@ menu_order: 40
 
 # Changelog
 
+## [1.3.1](https://github.com/MilliPress/Acorn-MilliCache/compare/v1.3.0...v1.3.1) (2026-08-29)
+
+
+### Bug Fixes
+
+* **middleware:** remove ignored query keys before the controller runs ([596fbfb](https://github.com/MilliPress/Acorn-MilliCache/commit/596fbfb584b5d5ddce7b471cb7d8239bfe7547ba))
+
 ## [1.3.0](https://github.com/MilliPress/Acorn-MilliCache/compare/v1.2.0...v1.3.0) (2026-07-16)
 
 
