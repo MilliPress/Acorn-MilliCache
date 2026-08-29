@@ -7,8 +7,8 @@
 | Requirement      | Version                 |
 |------------------|-------------------------|
 | PHP              | >= 8.1                  |
-| Roots Acorn      | ^4.0 \| ^5.0 \| ^6.0   |
-| MilliCache       | ^1.7.2 (auto-installed) |
+| Roots Acorn      | ^4.0 \| ^5.0 \| ^6.0    |
+| MilliCache       | ^1.8.1 (auto-installed) |
 
 ## Quick Start
 

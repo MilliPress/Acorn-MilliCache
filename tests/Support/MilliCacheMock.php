@@ -1,5 +1,11 @@
 <?php
 
+use MilliCache\Engine\Cache\Config;
+use MilliCache\Engine\Request\Cleaner;
+
+// MilliCache source files exit without ABSPATH.
+defined('ABSPATH') || define('ABSPATH', __DIR__.'/');
+
 /**
  * Lightweight mock for the global millicache() function.
  *
@@ -24,6 +30,28 @@ class MilliCacheMock
     public int $storeCalled = 0;
 
     public bool $executeQueueCalled = false;
+
+    public int $normalizeCalled = 0;
+
+    /** @var list<string> */
+    public array $ignoredKeys = ['utm_*', 'gclid'];
+
+    public function request(): self
+    {
+        return $this;
+    }
+
+    /**
+     * Delegate to MilliCache's real Cleaner with the mock's ignore list.
+     */
+    public function normalize(): void
+    {
+        $this->normalizeCalled++;
+
+        $config = Config::from_settings(['ignore_request_keys' => $this->ignoredKeys]);
+
+        (new Cleaner($config))->normalize_superglobals();
+    }
 
     public function flags(string $flag = ''): self
     {

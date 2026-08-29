@@ -30,6 +30,10 @@ class StoreResponse
             return $next($request);
         }
 
+        if (millicache()->check_cache_decision()) {
+            $this->normalizeRequest($request);
+        }
+
         $response = $next($request);
 
         if ($this->isNonStorable($response)) {
@@ -50,6 +54,33 @@ class StoreResponse
         $this->store($content, $response);
 
         return $response;
+    }
+
+    /**
+     * Remove MilliCache's ignored query keys before the controller runs.
+     *
+     * MilliCache strips them from the superglobals at the end of
+     * `template_redirect`, which Acorn routes never reach, and the Laravel
+     * Request was captured at boot. Doing it here keeps tracking parameters
+     * such as gclid or utm_* out of the stored response.
+     */
+    protected function normalizeRequest(Request $request): void
+    {
+        millicache()->request()->normalize();
+
+        $server = $request->server->all();
+        $server['REQUEST_URI'] = $_SERVER['REQUEST_URI'] ?? '';
+        $server['QUERY_STRING'] = $_SERVER['QUERY_STRING'] ?? '';
+
+        $request->initialize(
+            $_GET,
+            $request->request->all(),
+            $request->attributes->all(),
+            $request->cookies->all(),
+            $request->files->all(),
+            $server,
+            $request->getContent()
+        );
     }
 
     /**
